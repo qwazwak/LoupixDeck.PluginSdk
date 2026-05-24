@@ -18,6 +18,9 @@ public interface IPluginSettings
 
     void Remove(string key);
 
+    /// <summary>All keys currently present in the store, in undefined order.</summary>
+    IEnumerable<string> Keys { get; }
+
     /// <summary>Persists all pending changes to disk.</summary>
     void Save();
 }

@@ -16,5 +16,12 @@ public enum PluginSettingKind
     Number,
 
     /// <summary>On/off switch. Stored as <see cref="bool"/>.</summary>
-    Toggle
+    Toggle,
+
+    /// <summary>
+    /// Display-only heading/separator used to group fields. Has no editor and
+    /// stores no value — only <c>Label</c> (and optionally <c>Description</c>)
+    /// are read by the host. <c>Key</c> must still be unique within the schema.
+    /// </summary>
+    Heading
 }

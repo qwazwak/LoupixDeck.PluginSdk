@@ -8,6 +8,10 @@ dynamically loaded integration plugins — no application logic. Integrations
 and third-party plugins) are built against this SDK and shipped independently
 of the core.
 
+## Documentation
+
+SDK documentation is available in the [Wiki](https://github.com/RadiatorTwo/LoupixDeck.PluginSdk/wiki).
+
 ## Contracts
 
 | Type | Purpose |
