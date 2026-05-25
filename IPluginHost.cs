@@ -27,4 +27,32 @@ public interface IPluginHost
 
     /// <summary>Opens a folder navigation view on the touch screen.</summary>
     void OpenFolder(IFolderProvider provider);
+
+    /// <summary>
+    /// Opens <paramref name="url"/> in the user's default browser. Returns true
+    /// if the launch was dispatched. The host abstracts OS specifics (Windows:
+    /// shell-execute, Linux: xdg-open) so OAuth and similar flows don't need
+    /// per-plugin platform branches.
+    /// </summary>
+    bool OpenBrowser(string url);
+
+    /// <summary>
+    /// Temporarily paints <paramref name="text"/> on the touch slot at
+    /// <paramref name="slot"/>, restoring the slot's normal content after
+    /// <paramref name="duration"/>. A later call to this method on the same
+    /// slot supersedes any pending restore — use it for transient feedback
+    /// like volume changes or playback skips without dedicating a button.
+    /// Fires and forgets; the host does the timing.
+    /// </summary>
+    void OverlayTouchText(int slot, string text, TimeSpan duration);
+
+    /// <summary>
+    /// Returns the touch slot that visually sits next to the rotary encoder at
+    /// <paramref name="rotaryIndex"/>, or -1 if the active device has no such
+    /// neighbour. Use this together with
+    /// <see cref="OverlayTouchText"/> to flash a value (e.g. "75 %") on the
+    /// slot adjacent to the rotary that fired the command, without having to
+    /// hard-code per-device geometry in the plugin.
+    /// </summary>
+    int GetTouchSlotForRotary(int rotaryIndex);
 }

@@ -14,6 +14,13 @@ public sealed class CommandContext
     /// <summary>The button type the command was invoked from.</summary>
     public required ButtonTargets Target { get; init; }
 
+    /// <summary>
+    /// Identifier of the originating control (rotary index, touch slot, simple
+    /// button index) when <see cref="Target"/> denotes an indexed source.
+    /// Null when invoked from chained commands or CLI.
+    /// </summary>
+    public int? SourceIndex { get; init; }
+
     /// <summary>The active device, or null if none.</summary>
     public DeviceInfo? Device { get; init; }
 
