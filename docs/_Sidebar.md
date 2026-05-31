@@ -12,6 +12,7 @@
 **Advanced**
 - [Dynamic menus](Advanced-Menus)
 - [Folder navigation](Advanced-Folders)
+- [Exclusive mode](Advanced-Exclusive-Mode)
 - [Settings page](Advanced-Settings-Page)
 
 **Operations**

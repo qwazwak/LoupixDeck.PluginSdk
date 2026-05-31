@@ -55,4 +55,22 @@ public interface IPluginHost
     /// hard-code per-device geometry in the plugin.
     /// </summary>
     int GetTouchSlotForRotary(int rotaryIndex);
+
+    /// <summary>
+    /// Asks the host to put the active device into exclusive mode driven by
+    /// <paramref name="provider"/>. Returns false if another provider already
+    /// owns the device (no stealing). The host calls <see cref="IExclusiveModeProvider.OnEnter"/>
+    /// before returning true.
+    /// </summary>
+    bool RequestExclusiveMode(IExclusiveModeProvider provider);
+
+    /// <summary>
+    /// Releases exclusive mode. The provider parameter must match the currently
+    /// active provider; otherwise the call is a no-op. The host calls
+    /// <see cref="IExclusiveModeProvider.OnExit"/> and restores the normal page.
+    /// </summary>
+    void ReleaseExclusiveMode(IExclusiveModeProvider provider);
+
+    /// <summary>True while a provider currently owns the active device.</summary>
+    bool IsInExclusiveMode { get; }
 }

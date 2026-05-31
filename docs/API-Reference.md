@@ -37,6 +37,8 @@ interfaces, and a few value types. Everything lives in the
 | `FolderEntry` | [Folder Navigation](Advanced-Folders#folderentry) | A single grid slot in a folder. |
 | `FolderLayout` | [Folder Navigation](Advanced-Folders#folderlayout) | Grid geometry constants. |
 | `RotaryOverride` | [Folder Navigation](Advanced-Folders#rotaryoverride) | Per-encoder behavior while a folder is open. |
+| `IExclusiveModeProvider` | [Exclusive Mode](Advanced-Exclusive-Mode#iexclusivemodeprovider) | Full-device takeover (HUD, screensaver, video). |
+| `ExclusiveRenderMode` | [Exclusive Mode](Advanced-Exclusive-Mode#exclusiverendermode) | How the host pushes a provider's frames (full screen / grid / dirty tiles / single tile). |
 | `IPluginSettingsPage` | [Settings Page](Advanced-Settings-Page#ipluginsettingspage) | Exposes user-editable settings. |
 | `PluginSettingDescriptor` | [Settings Page](Advanced-Settings-Page#pluginsettingdescriptor) | One editable setting. |
 | `PluginSettingKind` | [Settings Page](Advanced-Settings-Page#pluginsettingkind) | Editor kind enum. |

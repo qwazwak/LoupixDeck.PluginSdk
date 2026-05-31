@@ -7,7 +7,7 @@ value types the host and the plugin share. A plugin is a single .NET class
 library that references this SDK, ships as a folder under the host's plugin
 directory, and is loaded dynamically at startup.
 
-- **Current SDK version:** 1.2.0
+- **Current SDK version:** 1.6.0
 - **Target framework:** `net9.0`
 - **Package:** `LoupixDeck.PluginSdk` (NuGet)
 - **License:** MIT
@@ -22,6 +22,7 @@ directory, and is loaded dynamically at startup.
 - Advanced
   - [Dynamic Menus](Advanced-Menus) — `IMenuContributor`, `MenuNode`
   - [Folder Navigation](Advanced-Folders) — `IFolderProvider`, `FolderEntry`, rotary overrides
+  - [Exclusive Mode](Advanced-Exclusive-Mode) — `IExclusiveModeProvider`, `ExclusiveRenderMode`, HUD/screensaver takeovers
   - [Settings Page](Advanced-Settings-Page) — `IPluginSettingsPage`, schema, actions
 - Operations
   - [Packaging & Distribution](Packaging-and-Distribution)
