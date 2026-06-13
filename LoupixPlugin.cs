@@ -25,4 +25,13 @@ public abstract class LoupixPlugin
 
     /// <summary>Returns the commands this plugin contributes.</summary>
     public abstract IEnumerable<IPluginCommand> GetCommands();
+
+    /// <summary>
+    /// Returns the side-strip providers this plugin contributes (renderers a user can
+    /// bind to a Razer side display strip in plugin-override mode). The host collects
+    /// these after <see cref="Initialize"/>, alongside <see cref="GetCommands"/>.
+    /// Defaults to none.
+    /// </summary>
+    public virtual IEnumerable<ISideStripProvider> GetSideStripProviders() =>
+        Array.Empty<ISideStripProvider>();
 }
