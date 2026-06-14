@@ -99,12 +99,12 @@ public interface ISideStripProvider
 public interface ISideStripSession : IDisposable
 {
     /// <summary>
-    /// Returns a PNG-encoded image for the strip (sized to the context's width × height,
-    /// i.e. 60×270 on the Razer). The host decodes it; a wrong-sized image is scaled to
-    /// fit. Return <c>null</c> or an empty array to let the host fall back to the default
-    /// segmented dial-label rendering for that frame.
+    /// Draws the whole strip (the context's width × height, i.e. 60×270 on the Razer) onto the
+    /// host-provided <paramref name="canvas"/> using its primitives. Return <c>true</c> when the
+    /// strip was drawn, or <c>false</c> to let the host fall back to the default segmented
+    /// dial-label rendering for that frame.
     /// </summary>
-    byte[]? RenderStrip();
+    bool RenderStrip(IRenderCanvas canvas);
 
     /// <summary>Raised when <see cref="RenderStrip"/>'s output has changed and the host
     /// should redraw. May be raised from a background thread; the host serializes and
@@ -118,4 +118,35 @@ public interface ISideStripSession : IDisposable
     /// (via <see cref="SideStripContext.RequestNextPage"/> /
     /// <see cref="SideStripContext.RequestPreviousPage"/>) or to consume it.</summary>
     void OnStripSwiped(StripSwipeDirection direction);
+}
+
+/// <summary>
+/// Marker for an <see cref="ISideStripProvider"/> that can render <b>individual segments</b>
+/// of a strip in the host's <i>segmented</i> mode (vs owning the whole strip in plugin-override
+/// mode). In segmented mode the host renders each dial's segment itself, but offers a
+/// segment-capable provider the chance to draw any segment it owns (e.g. the volume bar of an
+/// audio dial); segments the provider declines fall back to the default dial label. The session
+/// the provider returns must also implement <see cref="ISegmentStripSession"/>.
+/// </summary>
+public interface ISegmentStripProvider : ISideStripProvider
+{
+}
+
+/// <summary>
+/// Per-segment rendering capability, implemented by the session of an
+/// <see cref="ISegmentStripProvider"/> alongside <see cref="ISideStripSession"/>. Lets a plugin
+/// draw a single strip segment in segmented mode while the host keeps ownership of the others.
+/// Live updates, taps and disposal reuse the <see cref="ISideStripSession"/> members
+/// (<see cref="ISideStripSession.StripChanged"/>, <see cref="ISideStripSession.OnStripTapped"/>).
+/// </summary>
+public interface ISegmentStripSession
+{
+    /// <summary>
+    /// Draws one segment onto the host-provided <paramref name="canvas"/> (sized to the strip
+    /// width × the segment height, i.e. 60×90 on the Razer), using its primitives. Return
+    /// <c>true</c> when the segment was drawn, or <c>false</c> to let the host draw that dial's
+    /// default label. <paramref name="rotaryIndex"/> is 0-based within the side, top-to-bottom,
+    /// matching <see cref="SideStripContext.Rotaries"/>.
+    /// </summary>
+    bool RenderSegment(int rotaryIndex, IRenderCanvas canvas);
 }

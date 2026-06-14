@@ -8,6 +8,7 @@ public readonly record struct PluginColor(byte R, byte G, byte B, byte A = 255)
 {
     public static PluginColor Black => new(0, 0, 0);
     public static PluginColor White => new(255, 255, 255);
+    public static PluginColor Transparent => new(0, 0, 0, 0);
 
     public static PluginColor FromRgb(byte r, byte g, byte b) => new(r, g, b);
 }
