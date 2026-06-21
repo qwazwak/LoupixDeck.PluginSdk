@@ -9,8 +9,15 @@
 
     <!-- NuGet packaging. The LoupixDeck core consumes this SDK as a NuGet
          package; building the project drops a .nupkg into ./nupkg so a local
-         feed can serve it during development (see README). -->
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+         feed can serve it during development (see README).
+         Only pack on a plain build. When the core app (which references this
+         project) is published, the pack target runs as a side effect and its
+         GenerateDepsFile step races ahead of GetAssemblyVersion, triggering the
+         MSB4044 "GenerateDepsFile … AssemblyVersion" bug. _IsPublishing is set
+         as a global property during 'dotnet publish' and flows into referenced
+         projects, so skip packing then; plain 'dotnet build' still produces the
+         nupkg for the local dev feed and the CI build-plugins job. -->
+    <GeneratePackageOnBuild Condition="'$(_IsPublishing)' != 'true'">true</GeneratePackageOnBuild>
     <PackageOutputPath>$(MSBuildProjectDirectory)\nupkg</PackageOutputPath>
 
     <PackageId>LoupixDeck.PluginSdk</PackageId>
