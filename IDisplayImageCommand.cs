@@ -8,7 +8,9 @@ namespace LoupixDeck.PluginSdk;
 /// </summary>
 public interface IDisplayImageCommand : IPluginCommand
 {
-    /// <summary>How often the host should poll <see cref="RenderImage"/>.</summary>
+    /// <summary>
+    /// How often the host should poll <see cref="RenderImage"/>.
+    /// </summary>
     TimeSpan UpdateInterval { get; }
 
     /// <summary>

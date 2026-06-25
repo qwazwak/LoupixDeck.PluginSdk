@@ -10,21 +10,24 @@ public abstract class FolderProviderBase : IFolderProvider
     private static readonly IReadOnlyDictionary<int, RotaryOverride> EmptyOverrides =
         new Dictionary<int, RotaryOverride>();
 
+    /// <inheritdoc />
     public abstract string Title { get; }
 
+    /// <inheritdoc />
     public abstract IReadOnlyList<FolderEntry> BuildEntries();
 
+    /// <inheritdoc />
     public virtual IReadOnlyDictionary<int, RotaryOverride> RotaryOverrides => EmptyOverrides;
 
-    public virtual void OnEnter()
-    {
-    }
+    /// <inheritdoc />
+    public virtual void OnEnter() { }
 
-    public virtual void OnExit()
-    {
-    }
+    /// <inheritdoc />
+    public virtual void OnExit() { }
 
+    /// <inheritdoc />
     public event Action? EntriesChanged;
 
+    /// <inheritdoc />
     protected void RaiseEntriesChanged() => EntriesChanged?.Invoke();
 }

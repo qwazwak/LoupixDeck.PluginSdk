@@ -1,9 +1,12 @@
 namespace LoupixDeck.PluginSdk;
 
 /// <summary>
-/// A plain RGBA color. The SDK is UI-framework agnostic, so it does not expose
-/// Avalonia or SkiaSharp color types — the host converts as needed.
+/// A plain RGBA color.
 /// </summary>
+/// <remarks>
+/// The SDK is UI-framework agnostic, so it does not expose
+/// Avalonia or SkiaSharp color types — the host converts as needed.
+/// </remarks>
 public readonly record struct PluginColor(byte R, byte G, byte B, byte A = 255)
 {
     public static PluginColor Black => new(0, 0, 0);

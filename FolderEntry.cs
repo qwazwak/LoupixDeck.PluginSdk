@@ -6,12 +6,19 @@ namespace LoupixDeck.PluginSdk;
 /// </summary>
 public sealed class FolderEntry
 {
-    /// <summary>Target grid slot (see <see cref="FolderLayout"/>).</summary>
+    /// <summary>
+    /// Target grid slot (see <see cref="FolderLayout"/>).
+    /// </summary>
     public int SlotIndex { get; init; }
 
     public string Text { get; init; } = string.Empty;
 
-    /// <summary>Optional PNG-encoded icon bytes; null when the slot is text-only.</summary>
+    /// <summary>
+    /// Optional PNG-encoded icon bytes
+    /// </summary>
+    /// <remarks>
+    /// <see langword="null"/> when the slot is text-only.
+    /// </remarks>
     public byte[]? Image { get; init; }
 
     public PluginColor BackColor { get; init; } = PluginColor.Black;
@@ -19,10 +26,14 @@ public sealed class FolderEntry
     public int TextSize { get; init; } = 16;
     public bool Bold { get; init; }
 
-    /// <summary>Action run when the slot is tapped (a leaf entry).</summary>
+    /// <summary>
+    /// Action run when the slot is tapped (a leaf entry).
+    /// </summary>
     public Func<Task>? OnPress { get; init; }
 
-    /// <summary>Nested folder opened when the slot is tapped (a folder entry).</summary>
+    /// <summary>
+    /// Nested folder opened when the slot is tapped (a folder entry).
+    /// </summary>
     public IFolderProvider? OpensFolder { get; init; }
 }
 

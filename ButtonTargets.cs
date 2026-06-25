@@ -1,10 +1,12 @@
 namespace LoupixDeck.PluginSdk;
 
 /// <summary>
-/// The button types a command may be assigned to. A command declares its
-/// supported targets explicitly via <see cref="IPluginCommand.SupportedTargets"/>;
-/// the host filters the command-selection menu of each button type accordingly.
+/// The button types a command may be assigned to.
 /// </summary>
+/// <remarks>
+/// A command declares its supported targets explicitly via <see cref="IPluginCommand.SupportedTargets"/>;
+/// the host filters the command-selection menu of each button type accordingly.
+/// </remarks>
 [Flags]
 public enum ButtonTargets
 {

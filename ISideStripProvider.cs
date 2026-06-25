@@ -1,14 +1,18 @@
 namespace LoupixDeck.PluginSdk;
 
-/// <summary>Which side display strip of a side-strip device (e.g. Razer Stream
-/// Controller) a session drives.</summary>
+/// <summary>
+/// Which side display strip of a side-strip device (e.g. Razer Stream
+/// Controller) a session drives.
+/// </summary>
 public enum StripSide
 {
     Left,
     Right
 }
 
-/// <summary>Vertical swipe direction on a side strip.</summary>
+/// <summary>
+/// Vertical swipe direction on a side strip.
+/// </summary>
 public enum StripSwipeDirection
 {
     Up,
@@ -17,24 +21,46 @@ public enum StripSwipeDirection
 
 /// <summary>
 /// One of the dials adjacent to the strip a session drives (3 per side on the Razer).
-/// Lets a provider reflect what each knob actually controls — e.g. parse a device id
-/// out of <see cref="RightCommand"/> to show that endpoint's level. Indices are
-/// 0-based within the side.
 /// </summary>
+/// <remarks>
+/// Lets a provider reflect what each knob actually controls
+///  - e.g. parse a device id out of <see cref="RightCommand"/> to show that endpoint's level.
+/// Indices are 0-based within the side.
+/// </remarks>
 public sealed class SideStripRotary
 {
     public int Index { get; init; }
 
-    /// <summary>Static label configured for the knob (may be empty).</summary>
+    /// <summary>
+    /// Static label configured for the knob.
+    /// </summary>
+    /// <remarks>
+    /// May be <see cref="string.Empty"/> but not <see langword="null"/>.
+    /// </remarks>
     public string Label { get; init; } = string.Empty;
 
-    /// <summary>Command run on counter-clockwise / left turn (may be empty).</summary>
+    /// <summary>
+    /// Command run on counter-clockwise / left turn.
+    /// </summary>
+    /// <remarks>
+    /// May be <see cref="string.Empty"/> but not <see langword="null"/>.
+    /// </remarks>
     public string LeftCommand { get; init; } = string.Empty;
 
-    /// <summary>Command run on clockwise / right turn (may be empty).</summary>
+    /// <summary>
+    /// Command run on clockwise / right turn.
+    /// </summary>
+    /// <remarks>
+    /// May be <see cref="string.Empty"/> but not <see langword="null"/>.
+    /// </remarks>
     public string RightCommand { get; init; } = string.Empty;
 
-    /// <summary>Command run on knob press (may be empty).</summary>
+    /// <summary>
+    /// Command run on knob press.
+    /// </summary>
+    /// <remarks>
+    /// May be <see cref="string.Empty"/> but not <see langword="null"/>.
+    /// </remarks>
     public string PressCommand { get; init; } = string.Empty;
 }
 
@@ -45,24 +71,43 @@ public sealed class SideStripRotary
 /// </summary>
 public sealed class SideStripContext
 {
-    /// <summary>The strip this session drives.</summary>
+    /// <summary>
+    /// The strip this session drives.
+    /// </summary>
     public StripSide Side { get; init; }
 
-    /// <summary>Strip width in device pixels (60 on the Razer).</summary>
+    /// <summary>
+    /// Strip width in device pixels (60 on the Razer).
+    /// </summary>
     public int Width { get; init; }
 
-    /// <summary>Strip height in device pixels (270 on the Razer).</summary>
+    /// <summary>
+    /// Strip height in device pixels (270 on the Razer).
+    /// </summary>
     public int Height { get; init; }
 
-    /// <summary>The dials adjacent to this strip on the current page (3 on the Razer),
-    /// in top-to-bottom order.</summary>
+    /// <summary>
+    /// The dials adjacent to this strip on the current page (3 on the Razer),
+    /// in top-to-bottom order.
+    /// </summary>
     public IReadOnlyList<SideStripRotary> Rotaries { get; init; } = Array.Empty<SideStripRotary>();
 
-    /// <summary>Advances this side's rotary page. Safe to call from any thread.</summary>
-    public Action RequestNextPage { get; init; } = static () => { };
+    /// <summary>
+    /// Advances this side's rotary page.
+    /// </summary>
+    /// <remarks>
+    /// Safe to call from any thread.
+    /// </remarks>
+    public Action RequestNextPage { get; init; } = NoOp;
 
-    /// <summary>Goes back one rotary page on this side. Safe to call from any thread.</summary>
-    public Action RequestPreviousPage { get; init; } = static () => { };
+    /// <summary>
+    /// Goes back one rotary page on this side.
+    /// </summary>
+    /// <remarks>
+    /// Safe to call from any thread.
+    /// </remarks>
+    public Action RequestPreviousPage { get; init; } = NoOp;
+    private static void NoOp() { }
 }
 
 /// <summary>
@@ -76,34 +121,46 @@ public sealed class SideStripContext
 /// </summary>
 public interface ISideStripProvider
 {
-    /// <summary>Stable, unique id persisted in the page binding. Recommended form:
-    /// <c>"{pluginId}.{name}"</c> to avoid collisions across plugins.</summary>
+    /// <summary>
+    /// Stable, unique id persisted in the page binding.
+    /// </summary>
+    /// <remarks>
+    /// Recommended form:
+    /// <c>"{pluginId}.{name}"</c> to avoid collisions across plugins.
+    /// </remarks>
     string Id { get; }
 
-    /// <summary>Human-readable label shown in the strip-mode editor's provider picker.</summary>
+    /// <summary>
+    /// Human-readable label shown in the strip-mode editor's provider picker.
+    /// </summary>
     string Title { get; }
 
     /// <summary>
-    /// Creates a live session for one strip attachment. Called when a page bound to this
-    /// provider becomes current on a side; the returned session is disposed on detach
-    /// (navigating away, full-device takeover, device-off, or plugin unload).
+    /// Creates a live session for one strip attachment.
     /// </summary>
+    /// <remarks>
+    /// Called when a page bound to this provider becomes current on a side.
+    /// The returned session is disposed on detach (navigating away,
+    /// full-device takeover, device-off, or plugin unload).
+    /// </remarks>
     ISideStripSession CreateSession(SideStripContext context);
 }
 
 /// <summary>
 /// One live attachment of an <see cref="ISideStripProvider"/> to a single side. Holds the
-/// per-side state (geometry, the dials' bindings, subscriptions). Disposed by the host
-/// on detach — release timers / event subscriptions in <see cref="IDisposable.Dispose"/>.
+/// per-side state (geometry, the dials' bindings, subscriptions).
 /// </summary>
+/// <remarks>
+/// Disposed by the host on detach: release timers / event subscriptions in <see cref="IDisposable.Dispose"/>
+/// </remarks>
 public interface ISideStripSession : IDisposable
 {
     /// <summary>
     /// Draws the whole strip (the context's width × height, i.e. 60×270 on the Razer) onto the
-    /// host-provided <paramref name="canvas"/> using its primitives. Return <c>true</c> when the
-    /// strip was drawn, or <c>false</c> to let the host fall back to the default segmented
-    /// dial-label rendering for that frame.
+    /// host-provided <paramref name="canvas"/> using its primitives.
     /// </summary>
+    /// <param name="canvas">The host-provided canvas to draw on.</param>
+    /// <returns><see langword="true"/> when the strip was drawn, or <see langword="false"/> to let the host fall back to the default segmented dial-label rendering for that frame.</returns>
     bool RenderStrip(IRenderCanvas canvas);
 
     /// <summary>Raised when <see cref="RenderStrip"/>'s output has changed and the host
@@ -111,12 +168,17 @@ public interface ISideStripSession : IDisposable
     /// rate-limits the resulting redraws.</summary>
     event EventHandler StripChanged;
 
-    /// <summary>A tap landed on the strip. Coordinates are strip-local (0..Width, 0..Height).</summary>
+    /// <summary>
+    /// A tap landed on the strip. Coordinates are strip-local (0..Width, 0..Height).
+    /// </summary>
     void OnStripTapped(int x, int y);
 
-    /// <summary>A vertical swipe occurred on the strip. The session decides whether to page
-    /// (via <see cref="SideStripContext.RequestNextPage"/> /
-    /// <see cref="SideStripContext.RequestPreviousPage"/>) or to consume it.</summary>
+    /// <summary>
+    /// A vertical swipe occurred on the strip.
+    /// </summary>
+    /// <remarks>
+    /// The session will decide whether to page (via <see cref="SideStripContext.RequestNextPage"/> / <see cref="SideStripContext.RequestPreviousPage"/>) or to consume it.
+    /// </remarks>
     void OnStripSwiped(StripSwipeDirection direction);
 }
 
@@ -125,12 +187,12 @@ public interface ISideStripSession : IDisposable
 /// of a strip in the host's <i>segmented</i> mode (vs owning the whole strip in plugin-override
 /// mode). In segmented mode the host renders each dial's segment itself, but offers a
 /// segment-capable provider the chance to draw any segment it owns (e.g. the volume bar of an
-/// audio dial); segments the provider declines fall back to the default dial label. The session
-/// the provider returns must also implement <see cref="ISegmentStripSession"/>.
+/// audio dial); segments the provider declines fall back to the default dial label.
 /// </summary>
-public interface ISegmentStripProvider : ISideStripProvider
-{
-}
+/// <remarks>
+/// The session the provider returns must also implement <see cref="ISegmentStripSession"/>.
+/// </remarks>
+public interface ISegmentStripProvider : ISideStripProvider;
 
 /// <summary>
 /// Per-segment rendering capability, implemented by the session of an
@@ -143,10 +205,10 @@ public interface ISegmentStripSession
 {
     /// <summary>
     /// Draws one segment onto the host-provided <paramref name="canvas"/> (sized to the strip
-    /// width × the segment height, i.e. 60×90 on the Razer), using its primitives. Return
-    /// <c>true</c> when the segment was drawn, or <c>false</c> to let the host draw that dial's
-    /// default label. <paramref name="rotaryIndex"/> is 0-based within the side, top-to-bottom,
-    /// matching <see cref="SideStripContext.Rotaries"/>.
+    /// width × the segment height, i.e. 60×90 on the Razer), using its primitives.
     /// </summary>
+    /// <param name="rotaryIndex"><paramref name="rotaryIndex"/> is 0-based within the side, top-to-bottom, matching <see cref="SideStripContext.Rotaries"/>.</param>
+    /// <param name="canvas">The host-provided canvas to draw on.</param>
+    /// <returns><see langword="true"/> when the segment was drawn, or <see langword="false"/> to let the host draw that dial's default label.</returns>
     bool RenderSegment(int rotaryIndex, IRenderCanvas canvas);
 }

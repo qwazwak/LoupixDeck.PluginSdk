@@ -5,7 +5,9 @@ namespace LoupixDeck.PluginSdk;
 /// </summary>
 public sealed class PluginSettingAction
 {
-    /// <summary>Button label.</summary>
+    /// <summary>
+    /// Button label.
+    /// </summary>
     public required string Label { get; init; }
 
     /// <summary>

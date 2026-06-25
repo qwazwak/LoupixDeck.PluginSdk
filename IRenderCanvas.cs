@@ -18,9 +18,12 @@ public enum TextVAlign
 
 /// <summary>
 /// Optional styling for <see cref="IRenderCanvas.DrawSymbol(string,int,int,int,int,SymbolStyle)"/>:
-/// tint, outline, drop shadow, linear gradient fill and rotation. Defaults render a flat tinted
-/// glyph. Use an object initializer; only set what you need.
+/// tint, outline, drop shadow, linear gradient fill and rotation.
 /// </summary>
+/// <remarks>
+/// Defaults render a flat tinted glyph.
+/// Use an object initializer and only set what you need.
+/// </remarks>
 public readonly record struct SymbolStyle
 {
     public SymbolStyle(PluginColor tint)
@@ -28,10 +31,14 @@ public readonly record struct SymbolStyle
         Tint = tint;
     }
 
-    /// <summary>Solid fill color (ignored when <see cref="UseGradient"/> is true).</summary>
+    /// <summary>
+    /// Solid fill color (ignored when <see cref="UseGradient"/> is true).
+    /// </summary>
     public PluginColor Tint { get; init; } = PluginColor.White;
 
-    /// <summary>Rotation in degrees, clockwise.</summary>
+    /// <summary>
+    /// Rotation in degrees, clockwise.
+    /// </summary>
     public float Rotation { get; init; }
 
     public bool Outlined { get; init; }
@@ -56,20 +63,30 @@ public readonly record struct SymbolStyle
 /// symbols are rendered by the host, so a plugin's output stays visually consistent with the
 /// core (same font, same symbol library), while <see cref="DrawImage(byte[],int,int,int,int)"/>
 /// still lets a plugin composite anything it rasterizes itself.
-///
-/// <para>The canvas is valid <b>only during the synchronous render call that received it</b> —
-/// do not cache or use it later. Coordinates are canvas-local: (0,0) is the top-left of this
-/// region and <see cref="Width"/>×<see cref="Height"/> is the region size in device pixels.</para>
 /// </summary>
+/// <remarks>
+/// <para>
+/// The canvas is valid <b>only during the synchronous render call that received it</b>: do not cache or use it later.
+/// </para>
+/// Coordinates are canvas-local:
+/// (0,0) is the top-left of this region
+/// and <see cref="Width"/>×<see cref="Height"/> is the region size in device pixels.
+/// </remarks>
 public interface IRenderCanvas
 {
-    /// <summary>Region width in device pixels.</summary>
+    /// <summary>
+    /// Region width in device pixels.
+    /// </summary>
     int Width { get; }
 
-    /// <summary>Region height in device pixels.</summary>
+    /// <summary>
+    /// Region height in device pixels.
+    /// </summary>
     int Height { get; }
 
-    /// <summary>Fills the whole region with <paramref name="color"/>.</summary>
+    /// <summary>
+    /// Fills the whole region with <paramref name="color"/>.
+    /// </summary>
     void Clear(PluginColor color);
 
     // ── Rectangles ──────────────────────────────────────────────────────────
@@ -84,11 +101,18 @@ public interface IRenderCanvas
     void FillEllipse(int x, int y, int width, int height, PluginColor color);
     void DrawEllipse(int x, int y, int width, int height, int strokeWidth, PluginColor color);
 
-    /// <summary>Strokes an arc of the ellipse bounded by (x,y,width,height). Angles are in
-    /// degrees, clockwise, 0° at 3 o'clock. Good for round gauges.</summary>
+    /// <summary>
+    /// Strokes an arc of the ellipse bounded by (x,y,width,height).
+    /// </summary>
+    /// <remarks>
+    /// Angles are in degrees, clockwise, 0° at 3 o'clock.
+    /// Good for round gauges.
+    /// </remarks>
     void DrawArc(int x, int y, int width, int height, float startAngle, float sweepAngle, int strokeWidth, PluginColor color);
 
-    /// <summary>Fills a pie slice (wedge) of the ellipse bounded by (x,y,width,height).</summary>
+    /// <summary>
+    /// Fills a pie slice (wedge) of the ellipse bounded by (x,y,width,height).
+    /// </summary>
     void FillArc(int x, int y, int width, int height, float startAngle, float sweepAngle, PluginColor color);
 
     // ── Lines ───────────────────────────────────────────────────────────────
@@ -114,47 +138,72 @@ public interface IRenderCanvas
 
     /// <summary>
     /// Measures the single-line advance width of <paramref name="text"/> in the host's UI font
-    /// (no wrapping). Use it to fit/ellipsize text before drawing.
+    /// (no wrapping).
     /// </summary>
+    /// <remarks>
+    /// Use it to fit/ellipsize text before drawing.
+    /// </remarks>
     float MeasureText(string text, float fontSize, bool bold = false, bool italic = false);
 
     // ── Symbols ─────────────────────────────────────────────────────────────
-    /// <summary>Draws a symbol from the host's symbol library, tinted, fitted into the given box.
-    /// Unknown ids draw a placeholder.</summary>
+    /// <summary>
+    /// Draws a symbol from the host's symbol library, tinted, fitted into the given box.
+    /// </summary>
+    /// <remarks>
+    /// Unknown ids draw a placeholder.
+    /// </remarks>
     void DrawSymbol(string symbolId, int x, int y, int width, int height, PluginColor tint);
 
-    /// <summary>Draws a symbol with full styling (outline/shadow/gradient/rotation).</summary>
+    /// <summary>
+    /// Draws a symbol with full styling (outline/shadow/gradient/rotation).
+    /// </summary>
     void DrawSymbol(string symbolId, int x, int y, int width, int height, SymbolStyle style);
 
     // ── Images ──────────────────────────────────────────────────────────────
     /// <summary>
     /// Decodes <paramref name="imageBytes"/> (PNG or any host-decodable format) and blits it
-    /// aspect-fit into the given box. The escape hatch for fully custom plugin-rasterized content.
+    /// aspect-fit into the given box.
+    /// </summary>
+    /// <remarks>
+    /// The escape hatch for fully custom plugin-rasterized content.
     /// Repeated calls with the <b>same</b> byte array instance reuse a cached decode (so a plugin
     /// holding a static image does not pay the decode cost every frame).
-    /// </summary>
+    /// </remarks>
     void DrawImage(byte[] imageBytes, int x, int y, int width, int height);
 
     /// <summary>
-    /// As <see cref="DrawImage(byte[],int,int,int,int)"/> with an opacity (0–255) and an optional
-    /// tint (multiplied over the image; pass <see cref="PluginColor.White"/> / default for none).
+    /// As <see cref="DrawImage(byte[],int,int,int,int)"/> with an <paramref name="opacity"/> (0–255) and an optional
+    /// <paramref name="tint"/> (multiplied over the image; pass <see cref="PluginColor.White"/> / default for none).
     /// </summary>
     void DrawImage(byte[] imageBytes, int x, int y, int width, int height, byte opacity, PluginColor tint = default);
 
     // ── Transform ───────────────────────────────────────────────────────────
-    /// <summary>Saves the current transform so a later <see cref="PopTransform"/> restores it.</summary>
+    /// <summary>
+    /// Saves the current transform so a later <see cref="PopTransform"/> restores it.
+    /// </summary>
     void PushTransform();
 
-    /// <summary>Restores the transform saved by the matching <see cref="PushTransform"/>.</summary>
+    /// <summary>
+    /// Restores the transform saved by the matching <see cref="PushTransform"/>.
+    /// </summary>
     void PopTransform();
 
-    /// <summary>Translates subsequent drawing by (dx, dy).</summary>
+    /// <summary>
+    /// Translates subsequent drawing by (<paramref name="dx"/>, <paramref name="dy"/>).
+    /// </summary>
     void Translate(float dx, float dy);
 
-    /// <summary>Rotates subsequent drawing by <paramref name="degrees"/> (clockwise) about the
-    /// current origin. Translate to a pivot first to rotate about a point.</summary>
+    /// <summary>
+    /// Rotates subsequent drawing by <paramref name="degrees"/> (clockwise) about the
+    /// current origin.
+    /// </summary>
+    /// <remarks>
+    /// Translate to a pivot first to rotate about a point.
+    /// </remarks>
     void Rotate(float degrees);
 
-    /// <summary>Scales subsequent drawing by (sx, sy) about the current origin.</summary>
+    /// <summary>
+    /// Scales subsequent drawing by (<paramref name="sx"/>, <paramref name="sy"/>) about the current origin.
+    /// </summary>
     void Scale(float sx, float sy);
 }

@@ -9,10 +9,14 @@ namespace LoupixDeck.PluginSdk;
 /// </summary>
 public interface IPluginSettingsPage
 {
-    /// <summary>The editable settings, in display order.</summary>
+    /// <summary>
+    /// The editable settings, in display order.
+    /// </summary>
     IReadOnlyList<PluginSettingDescriptor> SettingsSchema { get; }
 
-    /// <summary>Optional action buttons shown on the settings form.</summary>
+    /// <summary>
+    /// Optional action buttons shown on the settings form.
+    /// </summary>
     IReadOnlyList<PluginSettingAction> SettingsActions { get; }
 
     /// <summary>
