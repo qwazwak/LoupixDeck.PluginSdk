@@ -73,4 +73,24 @@ public interface IPluginHost
 
     /// <summary>True while a provider currently owns the active device.</summary>
     bool IsInExclusiveMode { get; }
+
+    /// <summary>
+    /// Returns the names of all states defined on the (first) stateful button bound to
+    /// <paramref name="commandName"/>, in list order, or an empty list if none is found.
+    /// Use together with <see cref="SetActiveState"/> to drive an externally controlled button.
+    /// </summary>
+    IReadOnlyList<string> GetButtonStates(string commandName);
+
+    /// <summary>
+    /// Returns the active state's name for the (first) stateful button bound to
+    /// <paramref name="commandName"/>, or null if no such button exists.
+    /// </summary>
+    string? GetActiveButtonState(string commandName);
+
+    /// <summary>
+    /// Sets the active state — by state name (case-insensitive) or id — of every stateful button
+    /// bound to <paramref name="commandName"/>. Intended for externally controlled buttons; the
+    /// visible state changes only when the plugin calls this. Returns true if a button was updated.
+    /// </summary>
+    bool SetActiveButtonState(string commandName, string stateNameOrId);
 }
