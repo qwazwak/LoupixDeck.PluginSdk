@@ -26,4 +26,12 @@ public sealed class CommandContext
 
     /// <summary>The host bridge of the owning plugin.</summary>
     public required IPluginHost Host { get; init; }
+
+    /// <summary>
+    /// All commands of the button's sequence, in order (this rendering command first).
+    /// Empty for single-command buttons. Lets a display command compose a layout from
+    /// its siblings (e.g. one row/bar per command). Only the first command of a sequence
+    /// renders, so this is populated on the display/render path only.
+    /// </summary>
+    public IReadOnlyList<SequenceCommand> SequenceCommands { get; init; } = [];
 }
